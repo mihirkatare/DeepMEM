@@ -8,9 +8,9 @@ class randomNormalGen(Dataset):
         self.N = 1000
         self.X = 7 + np.random.randn(self.N, n_particles)
         self.Y = 20 + np.random.randn(self.N, 1)
-    
+
     def __len__(self):
         return self.N
-    
+
     def __getitem__(self, idx):
         return self.X[idx], self.Y[idx]
