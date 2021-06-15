@@ -1,6 +1,8 @@
 # DeepMEM
 [![NSF Award Number](https://img.shields.io/badge/NSF-1836650-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1836650)
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/mihirkatare/DeepMEM/main.svg)](https://results.pre-commit.ci/latest/github/mihirkatare/DeepMEM/main)
+
 This repository contains the code that was used for the IRIS-HEP Fellowship project: **[Deep Learning Implementations for Sustainable Matrix Element Method Calculations](https://iris-hep.org/fellows/mihirkatare.html)**.
 
 
