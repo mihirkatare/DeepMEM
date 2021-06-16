@@ -8,9 +8,9 @@ from debugdata import randomNormalGen
 from torch.utils.data import Dataset, DataLoader
 
 class referenceNetwork1(nn.Module):
-    ''' 
+    '''
     Network based on the description of the reference paper. Assumptions have been made to determine this
-    architecture since an exact description was not given. This Network is the best performing network on the 
+    architecture since an exact description was not given. This Network is the best performing network on the
     Drell-Yan Weights.
     Reference:https://arxiv.org/pdf/2008.10949.pdf
     '''
@@ -24,7 +24,7 @@ class referenceNetwork1(nn.Module):
         self.fc6 = nn.Linear(200, 1)
         self.relu = nn.ReLU()
         self.selu = nn.SELU()
-    
+
     def forward(self, x):
         y = self.relu(self.fc1(x))
         y = self.relu(self.fc2(y))
