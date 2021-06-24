@@ -1,0 +1,8 @@
+{
+    "input_paths": ["/data/deepmem_debug/tt_20evt.root"],
+    "output_paths": ["/data/deepmem_debug/tt_20evt_weights.root"],
+    "tree": "t",
+    "particles": ["lep1_p4", "lep2_p4", "ll_p4", "bjet1_p4", "bjet2_p4"],
+    "4v_coords": ["fPt", "fEta", "fPhi", "fM"],
+    "dir_name_processing": true
+}

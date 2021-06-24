@@ -1,3 +1,5 @@
 matplotlib~=3.4
 pandas~=1.2
 torchvision~=0.9.1
+uproot~=4.0.9
+awkward~=1.3.0
