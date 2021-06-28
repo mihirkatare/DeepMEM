@@ -4,5 +4,6 @@
     "tree": "t",
     "particles": ["lep1_p4", "lep2_p4", "ll_p4", "bjet1_p4", "bjet2_p4"],
     "4v_coords": ["fPt", "fEta", "fPhi", "fM"],
+    "weights": ["weight_TT", "weight_TT_err", "weight_TT_time"],
     "dir_name_processing": true
 }
