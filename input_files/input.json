@@ -1,9 +1,12 @@
 {
-    "input_paths": ["/data/deepmem_debug/tt_20evt.root"],
-    "output_paths": ["/data/deepmem_debug/tt_20evt_weights.root"],
+    "input_paths": ["C:/Users/mihir/OneDrive/Desktop/_repos/DeepMEMdata/tt_20evt.root"],
+    "output_paths": ["C:/Users/mihir/OneDrive/Desktop/_repos/DeepMEMdata/tt_20evt_weights.root"],
     "tree": "t",
     "particles": ["lep1_p4", "lep2_p4", "ll_p4", "bjet1_p4", "bjet2_p4"],
     "4v_coords": ["fPt", "fEta", "fPhi", "fM"],
     "weights": ["weight_TT", "weight_TT_err", "weight_TT_time"],
-    "dir_name_processing": true
+    "dir_name_processing": true,
+    "batch_size": 2,
+    "chunk_entries": 10,
+    "shuffle": true
 }
