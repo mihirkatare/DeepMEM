@@ -2,13 +2,13 @@ import numpy as np
 from torch.utils.data import Dataset, DataLoader
 from torchvision import datasets
 import uproot
-import os
+from pathlib import Path
 import json
-import time # testing only
+import time # used only for runtime testing
 from debug.fastloader import FastTensorDataLoader
 
 ##
-# This file contains the Data Manager and Data Loader modules
+# This file contains the Data Manager and Data Loader modules (Using PyTorch in-built dataloader)
 ##
 
 class DataManager():
@@ -18,10 +18,14 @@ class DataManager():
         self.args = args
         if(args["dir_name_processing"]):
             self.args["particles"] = list(map(self.string_processing, self.args["particles"]))
-    
+
+        # Resolve relative paths to absolute paths
+        self.args["input_paths"] = list(map( (lambda x : Path(x).resolve()), self.args["input_paths"]))
+        self.args["output_paths"] = list(map( (lambda x : Path(x).resolve()), self.args["output_paths"]))
+
     def string_processing(self, string):
         return( string + "/fCoordinates/fCoordinates." )
-    
+
 class CustomDataset(Dataset):
     def __init__(self, manager):
         self.manager = manager
@@ -31,7 +35,7 @@ class CustomDataset(Dataset):
         len = file[self.manager.args["tree"]].arrays(self.manager.args["weights"], library="pd").shape[0]
         file.close()
         return len
-    
+
     def getitemhelper(self, idx):
         for path in self.manager.args["input_paths"]:
             file = uproot.open(path)
@@ -70,7 +74,7 @@ class CustomDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.getitemhelper(idx)
-        
+
 
 # path = "/data/deepmem_debug/tt_20evt.root"
 # path_weights = "/data/deepmem_debug/tt_20evt_weights.root"
@@ -83,13 +87,14 @@ class CustomDataset(Dataset):
 # file.close()
 
 if(__name__ == "__main__"):
+    # This script is for testing the runtime of the dataloader.
+    # It has a similar structure to a common PyTorch training loop.
+
     start = time.time()
     data_manager = DataManager()
     dataset = CustomDataset(data_manager)
-    # generator = DataLoader(dataset, batch_size=2, shuffle=True, num_workers = 3)
+    generator = DataLoader(dataset, batch_size=2, shuffle=True, num_workers = 3)
 
-    X, Y = dataset.getall()
-    generator = FastTensorDataLoader(X,Y, batch_size=2, shuffle=True)
     for batch_idx, data in enumerate(generator):
         x, y = data
         print(x.shape, y.shape, " -> batch ", batch_idx)
