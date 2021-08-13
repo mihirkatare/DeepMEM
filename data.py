@@ -33,11 +33,11 @@ class CustomDataset(Dataset):
     def __init__(self, manager, opts, whichChunk=None):
         self.manager = manager
         self.opts = opts
-        
+
         file = uproot.open(self.manager.args["output_paths"][0])
         self.len = file[self.manager.args["output_tree"]].num_entries # Total number of samples
         file.close()
-        
+
         if(self.opts.loader == "hybrid" or self.opts.loader == "hybridMT"):
             self.bs = self.manager.args["batch_size"]
             self.nec = self.manager.args["chunk_entries"] # number of entries in a chunk
@@ -62,30 +62,30 @@ class CustomDataset(Dataset):
             for iter in range(len(self.manager.args["prefixes"])):
                 for i in self.manager.args["prefixes"][iter]:
                     inputs += [i+x for x in self.manager.args["suffixes"][iter]]
-            
+
             if(self.opts.loader == "inbuilt"):
                 X = file[self.manager.args["input_tree"]].arrays(inputs, library="pd", entry_start =idx, entry_stop =idx+1).values
-            
+
             elif(self.opts.loader == "hybrid"):
                 self.X_chunk = file[self.manager.args["input_tree"]].arrays(inputs, library="pd", entry_start = n*self.nec, entry_stop =(n+1)*self.nec).values
-           
+
             elif(self.opts.loader == "hybridMT"):
                 self.X_chunk = file[self.manager.args["input_tree"]].arrays(inputs, library="pd", entry_start = self.whichChunk*self.nec, entry_stop =(self.whichChunk+1)*self.nec).values
-            
+
             # self.X_chunk = np.stack(inputlist, axis=-1)
             file.close()
         ## Stacking of multiple paths not implemented yet
 
         for path in self.manager.args["output_paths"]:
             file = uproot.open(path)
-            
+
             if(self.opts.loader == "inbuilt"):
                 Y = file[self.manager.args["output_tree"]].arrays(self.manager.args["weights"], library="pd", entry_start =idx, entry_stop =idx+1).astype("float32").values
             elif(self.opts.loader == "hybrid"):
                 self.Y_chunk = file[self.manager.args["output_tree"]].arrays(self.manager.args["weights"], library="pd", entry_start = n*self.nec, entry_stop =(n+1)*self.nec).values
             elif(self.opts.loader == "hybridMT"):
                 self.Y_chunk = file[self.manager.args["output_tree"]].arrays(self.manager.args["weights"], library="pd", entry_start = self.whichChunk*self.nec, entry_stop =(self.whichChunk+1)*self.nec).values
-             
+
             file.close()
         ## Stacking of multiple paths not implemented yet
         if(self.opts.loader == "inbuilt"):
@@ -93,7 +93,7 @@ class CustomDataset(Dataset):
     def __getitem__(self, idx):
         if(self.opts.loader == "inbuilt"):
             return self.load_chunk(idx=idx)
-        
+
         elif(self.opts.loader == "hybrid"):
             chunkIdx = idx % self.bic
             if(chunkIdx == 0):
@@ -103,7 +103,7 @@ class CustomDataset(Dataset):
                 return self.X_chunk[chunkIdx*self.bs:], self.Y_chunk[chunkIdx*self.bs:]
             else:
                 return self.X_chunk[chunkIdx*self.bs:(chunkIdx+1)*self.bs], self.Y_chunk[chunkIdx*self.bs:(chunkIdx+1)*self.bs]
-        
+
         elif(self.opts.loader == "hybridMT"):
             self.load_chunk()
             if(idx == self.bic-1):

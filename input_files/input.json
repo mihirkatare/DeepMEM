@@ -9,5 +9,5 @@
     "dir_name_processing": false,
     "shuffle": true,
     "batch_size": 64,
-    "chunk_entries": 1024    
+    "chunk_entries": 1024
 }
