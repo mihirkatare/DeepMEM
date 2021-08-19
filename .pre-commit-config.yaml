@@ -18,3 +18,23 @@ repos:
     - id: mixed-line-ending
     - id: requirements-txt-fixer
     - id: trailing-whitespace
+
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v2.23.3
+    hooks:
+    - id: pyupgrade
+
+-   repo: https://github.com/pycqa/isort
+    rev: 5.9.3
+    hooks:
+    - id: isort
+
+-   repo: https://github.com/PyCQA/flake8
+    rev: 3.9.2
+    hooks:
+    - id: flake8
+
+-   repo: https://github.com/psf/black
+    rev: 21.7b0
+    hooks:
+    - id: black
