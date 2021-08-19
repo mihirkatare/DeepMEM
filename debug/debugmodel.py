@@ -13,7 +13,7 @@ class referenceNetwork1(nn.Module):
     """
 
     def __init__(self, n_particles):
-        super(referenceNetwork1, self).__init__()
+        super().__init__()
         self.fc1 = nn.Linear(n_particles, 200)
         self.fc2 = nn.Linear(200, 200)
         self.fc3 = nn.Linear(200, 200)
@@ -35,7 +35,7 @@ class referenceNetwork1(nn.Module):
 
 class DNN(nn.Module):
     def __init__(self):
-        super(DNN, self).__init__()
+        super().__init__()
         self.n_particles = 6
         self.net = referenceNetwork1(self.n_particles)
 
