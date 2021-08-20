@@ -54,7 +54,6 @@ class DNN():
         mse = nn.MSELoss()
         optimizer = torch.optim.Adam(self.net.parameters(), lr=self.manager.args["LearningRate"])
         scheduler = StepLR(optimizer, step_size=10, gamma=0.5) # Switched off currently, will be used or hyperparameter tuning
-
         # load validation set
         self.utils = datautils(self.manager, self.opts, dataset.scaler)
         self.utils.load_validation_set()
@@ -114,7 +113,6 @@ class DNN():
         plt.ylabel("events")
         plt.legend()
         plt.savefig(self.manager.args["save_testing_histogram_at"])
-
 if __name__ == "__main__":
     start = time.time()
     opts = parse_args()
