@@ -91,7 +91,7 @@ class CustomDataset(Dataset):
 
         for path in self.manager.args["output_paths"]:
             file = uproot.open(path)
-            
+
             if(self.opts.loader == "inbuilt"):
                 Y = file[self.manager.args["output_tree"]].arrays(self.manager.args["weights"], library="pd", entry_start =idx, entry_stop =idx+1).astype("float32").values
             elif(self.opts.loader == "hybrid"):
@@ -123,7 +123,7 @@ class CustomDataset(Dataset):
     def __getitem__(self, idx):
         if(self.opts.loader == "inbuilt"):
             return self.load_chunk(idx=idx)
-        
+
         elif(self.opts.loader == "hybrid"):
             chunkIdx = idx % self.bic
             if(chunkIdx == 0):
@@ -133,7 +133,7 @@ class CustomDataset(Dataset):
                 return self.X_chunk[chunkIdx*self.bs:], self.Y_chunk[chunkIdx*self.bs:]
             else:
                 return self.X_chunk[chunkIdx*self.bs:(chunkIdx+1)*self.bs], self.Y_chunk[chunkIdx*self.bs:(chunkIdx+1)*self.bs]
-        
+
         elif(self.opts.loader == "hybridMT"):
             # self.load_chunk()
             return self.X_chunk[idx*self.bs:(idx+1)*self.bs], self.Y_chunk[idx*self.bs:(idx+1)*self.bs]
