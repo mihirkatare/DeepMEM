@@ -114,9 +114,12 @@ class DNN():
         ax.hist(test_y_pred.detach().cpu().numpy(), bins=nbins, histtype = "step", label = "DNN Prediction")
         ax.set_xlabel(r"$-\log_{10}\,($Drell-Yan MoMEMta Weights$)$")
         ax.set_ylabel("events")
-        ax.set_yscale("log")
         ax.legend(loc="best")
-        fig.savefig(self.manager.args["save_testing_histogram_at"])
+        # fig.savefig(self.manager.args["save_testing_histogram_at"])
+        fig.savefig(f"post/histogram_{ax.get_yscale()}.png")
+
+        ax.set_yscale("log")
+        fig.savefig(f"post/histogram_{ax.get_yscale()}.png")
 
 if __name__ == "__main__":
     start = time.time()
