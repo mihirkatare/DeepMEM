@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -107,12 +107,17 @@ class DNN():
             test_loss = mse(utils.test_Y.float().cuda(device), test_y_pred).detach().item()
         print("Testing Loss: " + str("%.5f" % test_loss))
         nbins = 100
-        plt.hist(utils.test_Y.numpy(), bins=nbins, histtype = "step", color = "r", label = "Test Dataset")
-        plt.hist(test_y_pred.detach().cpu().numpy(), bins=nbins, histtype = "step", label = "DNN Prediction")
-        plt.xlabel("-log_10(DY weight)")
-        plt.ylabel("events")
-        plt.legend()
-        plt.savefig(self.manager.args["save_testing_histogram_at"])
+
+        fig = Figure()
+        ax = fig.subplots()
+        ax.hist(utils.test_Y.numpy(), bins=nbins, histtype = "step", color = "r", label = "Test Dataset")
+        ax.hist(test_y_pred.detach().cpu().numpy(), bins=nbins, histtype = "step", label = "DNN Prediction")
+        ax.set_xlabel(r"$-\log_{10}\,($Drell-Yan MoMEMta Weights$)$")
+        ax.set_ylabel("events")
+        ax.set_yscale("log")
+        ax.legend(loc="best")
+        fig.savefig(self.manager.args["save_testing_histogram_at"])
+
 if __name__ == "__main__":
     start = time.time()
     opts = parse_args()
