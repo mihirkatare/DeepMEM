@@ -3,7 +3,7 @@ from data import CustomDataset, DataManager
 from torch.utils.data import Dataset, DataLoader
 import sklearn
 from options import parse_args
-import uproot 
+import uproot
 import math
 import torch
 import numpy as np
@@ -31,14 +31,14 @@ class datautils:
             for iter in range(len(self.manager.args["prefixes"])):
                 for i in self.manager.args["prefixes"][iter]:
                     self.inputs += [i+x for x in self.manager.args["suffixes"][iter]]
-            
-            self.val_X = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = self.training_samples, entry_stop = self.training_samples+self.validation_samples).values            
+
+            self.val_X = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = self.training_samples, entry_stop = self.training_samples+self.validation_samples).values
             file.close()
 
         for path in self.manager.args["output_paths"]:
-            file = uproot.open(path)            
+            file = uproot.open(path)
             self.val_Y = torch.from_numpy(file[self.manager.args["output_tree"]].arrays(self.manager.args["weights"], library="pd", entry_start = self.training_samples, entry_stop = self.training_samples+self.validation_samples).values.squeeze())
-             
+
             file.close()
         self.val_Y = - np.log10(self.val_Y)
         self.preprocess_X(mode = "val")
@@ -52,14 +52,14 @@ class datautils:
             for iter in range(len(self.manager.args["prefixes"])):
                 for i in self.manager.args["prefixes"][iter]:
                     self.inputs += [i+x for x in self.manager.args["suffixes"][iter]]
-            
-            self.test_X = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = self.training_samples+self.validation_samples).values            
+
+            self.test_X = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = self.training_samples+self.validation_samples).values
             file.close()
 
         for path in self.manager.args["output_paths"]:
-            file = uproot.open(path)            
+            file = uproot.open(path)
             self.test_Y = torch.from_numpy(file[self.manager.args["output_tree"]].arrays(self.manager.args["weights"], library="pd", entry_start = self.training_samples+self.validation_samples).values.squeeze())
-             
+
             file.close()
         self.test_Y = - np.log10(self.test_Y)
         self.preprocess_X(mode = "test")
@@ -70,14 +70,14 @@ class datautils:
         for i in range(len(self.inputs)):
            if(self.inputs[i][-3:] == "Phi"):
                phi_indices.append(i)
-        
+
         if(len(phi_indices)>1):
             for j in range(1,len(phi_indices)):
                 if(mode == "val"):
                     self.val_X[:, phi_indices[j]] -= self.val_X[:, phi_indices[0]]
                 elif(mode == "test"):
                     self.test_X[:, phi_indices[j]] -= self.test_X[:, phi_indices[0]]
- 
+
 if __name__ == "__main__":
     start = time.time()
     opts = parse_args()
