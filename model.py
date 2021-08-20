@@ -116,10 +116,13 @@ class DNN():
         ax.set_ylabel("events")
         ax.legend(loc="best")
         # fig.savefig(self.manager.args["save_testing_histogram_at"])
-        fig.savefig(f"post/histogram_{ax.get_yscale()}.png")
+        file_extension = ["png", "pdf"]
+        for extension in file_extension:
+            fig.savefig(f"post/histogram_{ax.get_yscale()}.{extension}")
 
         ax.set_yscale("log")
-        fig.savefig(f"post/histogram_{ax.get_yscale()}.png")
+        for extension in file_extension:
+            fig.savefig(f"post/histogram_{ax.get_yscale()}.{extension}")
 
 if __name__ == "__main__":
     start = time.time()
