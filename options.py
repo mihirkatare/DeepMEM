@@ -3,9 +3,11 @@ import argparse
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--loader", type=str, default="inbuilt")
-    parser.add_argument("--device", type=int, required=True)
-
+    parser.add_argument("--loader", type=str, default="hybridMT")
+    parser.add_argument("--device", type=int, default=None)
+    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--inputfile", type=str, default="input_files/input.json")
+    parser.add_argument("--mode", type=str, default="train")
     opts = parser.parse_args()
     return opts
 
