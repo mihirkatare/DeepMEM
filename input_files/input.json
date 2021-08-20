@@ -1,13 +1,20 @@
 {
-    "input_paths": ["/raid/projects/feickert/data/mem_studies/drell_yan/preprocessing_output_nevents_10e4.root"],
-    "output_paths": ["/raid/projects/feickert/data/mem_studies/drell_yan/drell-yan_weights_test.root"],
+    "input_paths": ["/raid/projects/feickert/data/mem_studies/drell_yan/preprocessing_output_nevents_10e6.root"],
+    "output_paths": ["/raid/projects/feickert/data/mem_studies/drell_yan/momemta_weights.root"],
     "input_tree": "event_selection/hftree;1",
     "output_tree": "momemta;1",
-    "prefixes": [["lep1_", "lep2_"], ["MET"]],
-    "suffixes": [["Pt", "Eta", "Phi", "M"], ["", "Phi"]],
+    "prefixes": [["lep1_", "lep2_"], ["j1", "j2"], ["MET"]],
+    "suffixes": [["Pt", "Eta", "Phi"], ["PT", "Eta", "Phi"], ["", "Phi"]],
     "weights": ["weight_DY"],
     "dir_name_processing": false,
     "shuffle": true,
     "batch_size": 64,
-    "chunk_entries": 1024
+    "chunk_entries": 65536,
+    "split": [8, 1, 1],
+    "LearningRate": 0.001,
+    "save_lowest_loss_model_at": "post/tempsave_lowest.pth",
+    "save_scaler_at": "post/scaler.joblib",
+    "load_saved_model_from": "post/tempsave_lowest.pth",
+    "load_scaler_from": "post/scaler.joblib",
+    "save_testing_histogram_at": "post/histogram.png"
 }
