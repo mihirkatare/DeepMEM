@@ -1,5 +1,6 @@
 import torch
 
+
 class FastTensorDataLoader:
     """
     A DataLoader-like object for a set of tensors that can be much faster than
@@ -7,6 +8,7 @@ class FastTensorDataLoader:
     the dataset and calls cat (slow).
     Source: https://discuss.pytorch.org/t/dataloader-much-slower-than-manual-batching/27014/6
     """
+
     def __init__(self, *tensors, batch_size=32, shuffle=False):
         """
         Initialize a FastTensorDataLoader.
@@ -28,6 +30,7 @@ class FastTensorDataLoader:
         if remainder > 0:
             n_batches += 1
         self.n_batches = n_batches
+
     def __iter__(self):
         if self.shuffle:
             r = torch.randperm(self.dataset_len)
@@ -38,7 +41,7 @@ class FastTensorDataLoader:
     def __next__(self):
         if self.i >= self.dataset_len:
             raise StopIteration
-        batch = tuple(t[self.i:self.i+self.batch_size] for t in self.tensors)
+        batch = tuple(t[self.i : self.i + self.batch_size] for t in self.tensors)
         self.i += self.batch_size
         return batch
 
