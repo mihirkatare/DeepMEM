@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,6 +12,7 @@ import time # used only for runtime testing
 from torch.optim.lr_scheduler import StepLR
 from utils import datautils
 import joblib
+import hist
 
 class referenceNetwork1(nn.Module):
     '''
@@ -105,16 +107,38 @@ class DNN():
         with torch.no_grad():
             test_y_pred = self.net(utils.test_X.float().cuda(device)).squeeze()
             test_loss = mse(utils.test_Y.float().cuda(device), test_y_pred).detach().item()
-        print("Testing Loss: " + str("%.5f" % test_loss))
-        nbins = 100
+        print(f"Testing Loss: {test_loss:.5f}")
+        # nbins = 100
+        nbins = 80
 
-        fig = Figure()
-        ax = fig.subplots()
-        ax.hist(utils.test_Y.numpy(), bins=nbins, histtype = "step", color = "r", label = "Test Dataset")
-        ax.hist(test_y_pred.detach().cpu().numpy(), bins=nbins, histtype = "step", label = "DNN Prediction")
-        ax.set_xlabel(r"$-\log_{10}\,($Drell-Yan MoMEMta Weights$)$")
-        ax.set_ylabel("events")
-        ax.legend(loc="best")
+        simulation = utils.test_Y.numpy()
+        predictions = test_y_pred.detach().cpu().numpy()
+
+        # fig = Figure()
+        # ax = fig.subplots()
+        # fig = plt.figure(figsize=(10, 8))
+        fig = plt.figure()
+        x_range=[0,10.5]
+        x_label = r"$-\log_{10}\,($Drell-Yan MEM Weights$)$"
+        simulation_hist = hist.Hist(hist.axis.Regular(
+        nbins, x_range[0], x_range[1], name="weights", label=x_label, underflow=False, overflow=False)
+        )
+        simulation_hist.fill(simulation)
+        prediction_hist = hist.Hist(hist.axis.Regular(
+        nbins, x_range[0], x_range[1], name="weights", label=x_label, underflow=False, overflow=False)
+        )
+        prediction_hist.fill(predictions)
+
+        main_ax_artists, sublot_ax_arists = prediction_hist.plot_ratio(
+            simulation_hist,
+            rp_ylabel="DNN/Calc.",
+            rp_num_label="DNN Prediction",
+            rp_denom_label="MoMEMta Calculation",
+            rp_uncert_draw_type="line",  # line or bar
+            rp_ylim=[-0.1,2.1],
+        )
+        ax = main_ax_artists[0][0].stairs.axes
+        ax.legend(loc="best", frameon=False)
         # fig.savefig(self.manager.args["save_testing_histogram_at"])
         file_extension = ["png", "pdf"]
         for extension in file_extension:
