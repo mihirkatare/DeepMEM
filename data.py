@@ -72,7 +72,7 @@ class CustomDataset(Dataset):
                 base_array_x = mp.Array(ctypes.c_float, self.nec*self.n_inputs)
                 cached_array_x = np.ctypeslib.as_array(base_array_x.get_obj())
                 cached_array_x = cached_array_x.reshape(self.nec, self.n_inputs)
-                self.X_chunk = torch.from_numpy(cached_array)
+                self.X_chunk = torch.from_numpy(cached_array_x)
 
                 base_array_y = mp.Array(ctypes.c_float, self.nec)
                 cached_array_y = np.ctypeslib.as_array(base_array_y.get_obj())
@@ -103,7 +103,9 @@ class CustomDataset(Dataset):
                 X = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start =idx, entry_stop =idx+1).values
 
             elif(self.opts.loader == "hybrid"):
-                self.X_chunk = self.scaler.transform(preprocess_X(file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = n*self.nec, entry_stop =(n+1)*self.nec).values))
+                self.X_chunk = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = n*self.nec, entry_stop =(n+1)*self.nec).values
+                self.preprocess_X()
+                self.X_chunk = self.scaler.transform(self.X_chunk)
 
             elif(self.opts.loader == "hybridMT"):
                 self.X_chunk = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = 0, entry_stop = self.n_total_batches*self.bs).values
