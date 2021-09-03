@@ -11,6 +11,7 @@ import time # used only for runtime testing
 from torch.optim.lr_scheduler import StepLR
 from utils import datautils
 import joblib
+import hist
 
 class referenceNetwork1(nn.Module):
     '''
@@ -39,6 +40,29 @@ class referenceNetwork1(nn.Module):
         y = self.selu(self.fc6(y))
         return y
 
+class referenceNetwork2(nn.Module):
+    def __init__(self, n_particles):
+        super(referenceNetwork2, self).__init__()
+        self.fc1 = nn.Linear(n_particles, 200)
+        self.fc2 = nn.Linear(200, 200)
+        self.fc3 = nn.Linear(200, 200)
+        self.fc4 = nn.Linear(200, 200)
+        self.fc5 = nn.Linear(200, 200)
+        self.fc6 = nn.Linear(200, 1)
+        self.relu = nn.ReLU()
+        self.selu = nn.SELU()
+        self.bn1 = nn.BatchNorm1d(200)
+        self.bn2 = nn.BatchNorm1d(1)
+
+    def forward(self, x):
+        y = self.relu(self.fc1(x))
+        y = self.relu(self.fc2(y))
+        y = self.relu(self.fc3(y))
+        y = self.relu(self.fc4(y))
+        y = self.relu(self.bn1(self.fc5(y)))
+        y = self.selu(self.bn2(self.fc6(y)))
+        return y
+
 class DNN():
     def __init__(self, manager, opts):
         self.manager = manager
@@ -46,14 +70,14 @@ class DNN():
         self.n_particles = 0
         for i in range(len(self.manager.args["prefixes"])):
             self.n_particles += len(self.manager.args["prefixes"][i]) * len(self.manager.args["suffixes"][i])
-        self.net = referenceNetwork1(self.n_particles)
+        self.net = referenceNetwork2(self.n_particles)
 
     def train(self, device, epochs):
         dataset = CustomDataset(self.manager, self.opts)
         train_loader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers = 0)
         mse = nn.MSELoss()
         optimizer = torch.optim.Adam(self.net.parameters(), lr=self.manager.args["LearningRate"])
-        scheduler = StepLR(optimizer, step_size=10, gamma=0.5) # Switched off currently, will be used or hyperparameter tuning
+        scheduler = StepLR(optimizer, step_size=15, gamma=0.5) # Switched off currently, will be used or hyperparameter tuning
         
         # load validation set
         self.utils = datautils(self.manager, self.opts, dataset.scaler)
@@ -108,13 +132,19 @@ class DNN():
             test_loss = mse(utils.test_Y.float().cuda(device), test_y_pred).detach().item()
         print("Testing Loss: " + str("%.5f" % test_loss))
         nbins = 100
-        plt.hist(utils.test_Y.numpy(), bins=nbins, histtype = "step", color = "r", label = "Test Dataset")
-        plt.hist(test_y_pred.detach().cpu().numpy(), bins=nbins, histtype = "step", label = "DNN Prediction")
-        plt.xlabel("-log_10(DY weight)")
-        plt.ylabel("events")
-        plt.legend()
+        # plt.hist(utils.test_Y.numpy(), bins=nbins, histtype = "step", color = "r", label = "Test Dataset")
+        # plt.hist(test_y_pred.detach().cpu().numpy(), bins=nbins, histtype = "step", label = "DNN Prediction")
+        # plt.xlabel("-log_10(DY weight)")
+        # plt.ylabel("events")
+        # plt.legend()
+        # plt.savefig(self.manager.args["save_testing_histogram_at"])
+        hist_1 = hist.Hist(hist.axis.Regular(nbins, 0, 10, name="-log_10(DY weight)")).fill(utils.test_Y.numpy())
+        hist_2 = hist.Hist(hist.axis.Regular(nbins, 0, 10, name="-log_10(DY weight)")).fill(test_y_pred.detach().cpu().numpy())
+        fig = plt.figure(figsize=(10, 8))
+        main_ax_artists, sublot_ax_arists = hist_1.plot_ratio(hist_2, rp_ylabel=r"Ratio", rp_num_label="Test Dataset", rp_denom_label="DNN Prediction", rp_uncert_draw_type="line")
+        plt.yticks(np.arange(-5,6))
+        plt.grid()
         plt.savefig(self.manager.args["save_testing_histogram_at"])
-       
 if __name__ == "__main__":
     start = time.time()
     opts = parse_args()
