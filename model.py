@@ -155,4 +155,3 @@ if __name__ == "__main__":
     if opts.mode == "test":
         obj.inference(device = torch.device(opts.device))
     print("Script time: ", time.time() - start)
-

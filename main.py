@@ -9,7 +9,6 @@ if __name__ == "__main__":
     opts = parse_args()
     if(opts.device == None):
         opts.device = "cpu"
-    
     data_manager = DataManager(input_file = opts.inputfile)
     obj = DNN(data_manager, opts)
     if opts.mode == "train":
