@@ -11,6 +11,8 @@ import torch
 from sklearn.utils import shuffle
 from sklearn.preprocessing import MinMaxScaler
 import joblib
+import ctypes
+import multiprocessing as mp
 ##
 # This file contains the Data Manager and Data Loader modules
 ##
@@ -45,6 +47,7 @@ class CustomDataset(Dataset):
 
         self.split = self.manager.args["split"]
         self.len = math.floor(self.len*(self.split[0]/sum(self.split))) # training fraction * total length
+        
         if(self.opts.loader == "hybrid" or self.opts.loader == "hybridMT"):
             self.bs = self.manager.args["batch_size"]
             self.nec = self.manager.args["chunk_entries"] # number of entries in a chunk
@@ -59,6 +62,26 @@ class CustomDataset(Dataset):
                 self.scaler.fit(self.X_chunk)
                 self.X_chunk = self.scaler.transform(self.X_chunk)
                 joblib.dump(self.scaler, self.manager.args["save_scaler_at"])
+            
+            # Setting up a "cache-like" mechanic for multiprocessing that will be shared between workers 
+            if(self.opts.loader == "hybrid"):
+                # Calculate the number of columns using prefixes and suffixes from input file
+                self.n_inputs = 0
+                for i in range(len(self.manager.args["prefixes"])):
+                    self.n_inputs += len(self.manager.args["prefixes"][i]) * len(self.manager.args["suffixes"][i])
+
+                base_array_x = mp.Array(ctypes.c_float, self.nec*self.n_inputs)
+                cached_array_x = np.ctypeslib.as_array(base_array_x.get_obj())
+                cached_array_x = cached_array_x.reshape(self.nec, self.n_inputs)
+                self.X_chunk = torch.from_numpy(cached_array)
+
+                base_array_y = mp.Array(ctypes.c_float, self.nec)
+                cached_array_y = np.ctypeslib.as_array(base_array_y.get_obj())
+                cached_array_y = cached_array_y.reshape(self.nec)
+                self.Y_chunk = torch.from_numpy(cached_array_y)
+
+                self.scaler = joblib.load(self.manager.args["load_scaler_from"])
+
 
     def __len__(self):
         if(self.opts.loader == "inbuilt"):
@@ -81,7 +104,7 @@ class CustomDataset(Dataset):
                 X = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start =idx, entry_stop =idx+1).values
 
             elif(self.opts.loader == "hybrid"):
-                self.X_chunk = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = n*self.nec, entry_stop =(n+1)*self.nec).values
+                self.X_chunk = self.scaler.transform(preprocess_X(file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = n*self.nec, entry_stop =(n+1)*self.nec).values))
 
             elif(self.opts.loader == "hybridMT"):
                 self.X_chunk = file[self.manager.args["input_tree"]].arrays(self.inputs, library="pd", entry_start = 0, entry_stop = self.n_total_batches*self.bs).values
@@ -147,7 +170,7 @@ if __name__ == "__main__":
     opts = parse_args()
     data_manager = DataManager()
     dataset = CustomDataset(data_manager, opts)
-    generator = DataLoader(dataset, batch_size=1, shuffle=False, num_workers = 0)
+    generator = DataLoader(dataset, batch_size=1, shuffle=False, num_workers = 3)
 
     for batch_idx, data in enumerate(generator):
         x, y = data
