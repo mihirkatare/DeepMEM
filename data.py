@@ -56,6 +56,7 @@ class CustomDataset(Dataset):
                 self.n_total_batches = self.len // self.bs # total number of batches in the dataset
                 self.load_chunk()
                 self.preprocess_X()
+                # self.add_noise()
 
                 self.scaler = MinMaxScaler(feature_range =(0,1), copy=True)
                 self.scaler.fit(self.X_chunk)
@@ -142,6 +143,9 @@ class CustomDataset(Dataset):
             for j in range(1,len(phi_indices)):
                 self.X_chunk[:, phi_indices[j]] -= self.X_chunk[:, phi_indices[0]] 
     
+    def add_noise(self):
+        print(np.mean(self.X_chunk, axis=0))
+        self.X_chunk.bkpt
     def __getitem__(self, idx):
         if(self.opts.loader == "inbuilt"):
             return self.load_chunk(idx=idx)
@@ -169,8 +173,8 @@ if __name__ == "__main__":
     opts = parse_args()
     data_manager = DataManager()
     dataset = CustomDataset(data_manager, opts)
-    generator = DataLoader(dataset, batch_size=1, shuffle=False, num_workers = 3)
-
+    generator = DataLoader(dataset, batch_size=64, shuffle=False, num_workers = 12)
+    start = time.time()
     for batch_idx, data in enumerate(generator):
         x, y = data
         print(x.shape, y.shape, " -> batch ", batch_idx)
