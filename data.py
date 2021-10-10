@@ -46,7 +46,7 @@ class CustomDataset(Dataset):
 
         self.split = self.manager.args["split"]
         self.len = math.floor(self.len*(self.split[0]/sum(self.split))) # training fraction * total length
-        
+
         if(self.opts.loader == "hybrid" or self.opts.loader == "hybridMT"):
             self.bs = self.manager.args["batch_size"]
             self.nec = self.manager.args["chunk_entries"] # number of entries in a chunk
@@ -62,8 +62,8 @@ class CustomDataset(Dataset):
                 self.scaler.fit(self.X_chunk)
                 self.X_chunk = self.scaler.transform(self.X_chunk)
                 joblib.dump(self.scaler, self.manager.args["save_scaler_at"])
-            
-            # Setting up a "cache-like" mechanic for multiprocessing that will be shared between workers 
+
+            # Setting up a "cache-like" mechanic for multiprocessing that will be shared between workers
             if(self.opts.loader == "hybrid"):
                 # Calculate the number of columns using prefixes and suffixes from input file
                 self.n_inputs = 0
@@ -141,8 +141,8 @@ class CustomDataset(Dataset):
                phi_indices.append(i)
         if(len(phi_indices)>1):
             for j in range(1,len(phi_indices)):
-                self.X_chunk[:, phi_indices[j]] -= self.X_chunk[:, phi_indices[0]] 
-    
+                self.X_chunk[:, phi_indices[j]] -= self.X_chunk[:, phi_indices[0]]
+
     def add_noise(self):
         print(np.mean(self.X_chunk, axis=0))
         self.X_chunk.bkpt
