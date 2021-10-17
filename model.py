@@ -13,7 +13,7 @@ from utils import datautils
 import joblib
 import hist
 from sklearn.metrics import mean_absolute_percentage_error as mape
-from networks import *
+from networks import referenceNetwork1, referenceNetwork2, res2, resNetwork
 
 class DNN():
     def __init__(self, manager, opts):
@@ -30,7 +30,7 @@ class DNN():
         mse = nn.MSELoss()
         optimizer = torch.optim.Adam(self.net.parameters(), lr=self.manager.args["LearningRate"])
         scheduler = StepLR(optimizer, step_size=25, gamma=0.7) # Switched off currently, will be used or hyperparameter tuning
-        
+
         # load validation set
         self.utils = datautils(self.manager, self.opts, dataset.scaler)
         self.utils.load_validation_set()
@@ -84,12 +84,6 @@ class DNN():
             test_loss = mse(utils.test_Y.float().cuda(device), test_y_pred).detach().item()
         print("Testing Loss: " + str("%.5f" % test_loss) + " MAPE: " + str(mape(utils.test_Y.float(), test_y_pred.cpu())) )
         nbins = 100
-        # plt.hist(utils.test_Y.numpy(), bins=nbins, histtype = "step", color = "r", label = "Test Dataset")
-        # plt.hist(test_y_pred.detach().cpu().numpy(), bins=nbins, histtype = "step", label = "DNN Prediction")
-        # plt.xlabel("-log_10(DY weight)")
-        # plt.ylabel("events")
-        # plt.legend()
-        # plt.savefig(self.manager.args["save_testing_histogram_at"])
         hist_1 = hist.Hist(hist.axis.Regular(nbins, 0, 10, name="-log_10(DY weight)")).fill(utils.test_Y.numpy())
         hist_2 = hist.Hist(hist.axis.Regular(nbins, 0, 10, name="-log_10(DY weight)")).fill(test_y_pred.detach().cpu().numpy())
         fig = plt.figure(figsize=(10, 8))
