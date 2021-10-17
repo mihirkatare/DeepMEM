@@ -30,7 +30,7 @@ class DNN():
         mse = nn.MSELoss()
         optimizer = torch.optim.Adam(self.net.parameters(), lr=self.manager.args["LearningRate"])
         scheduler = StepLR(optimizer, step_size=25, gamma=0.7) # Switched off currently, will be used or hyperparameter tuning
-        
+
         # load validation set
         self.utils = datautils(self.manager, self.opts, dataset.scaler)
         self.utils.load_validation_set()

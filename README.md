@@ -16,13 +16,13 @@ The code is stable in python 3.8.5. Use the requirements.txt file to install the
 
 ---
 ## **Explanation of inputs**
-To run this code simply run `main.py` with the required shell arguments and input file modifications. 
+To run this code simply run `main.py` with the required shell arguments and input file modifications.
 The code takes two types of inputs:
 - Through an JSON input file (e.g.: `input_files/input.json`): This is supposed to have inputs that do not require dynamimc user changes, i.e, during the training/optimization phase these will remain mostly constant.
 - Through shell arguments (e.g. python main.py **`--device=0`**): These are inputs that would usually require dynamic user changes before running the code.
 
 #### **Examples**:
-Go through the input file at `input_files/input.json` and modify the paths to the data, where to save and load models, scalers, etc.  
+Go through the input file at `input_files/input.json` and modify the paths to the data, where to save and load models, scalers, etc.
 Then run the following code to train the model on the options in the `input_files/input.json` using the **0th numbered CUDA GPU** for **50 epochs**:
 
 ```console
@@ -35,7 +35,7 @@ $ python main.py --device=0 --mode=test
 It should save a histogram with a visual explanation of the model performance in `post/histogram.png` (path can be changed in input file)
 ### **Shell Arguments Explanation**:
 Insert these in front of `python main.py` when running the code.
-1. **--loader**: [Default: hybridMT] Which dataloader implementation to use out of [inbuilt, hybrid, hybridMT]  
+1. **--loader**: [Default: hybridMT] Which dataloader implementation to use out of [inbuilt, hybrid, hybridMT]
 **AT THE MOMENT ONLY hybridMT is properly supported. It loads all the data into memory and can be use for reasonably sized datasets (works comfortably with ~300k events on DGX)**
 
 2. **--device**: [Default: None] Which numbered cuda device to use for training. Using `None` will select the CPU instead (Not reccomended)
@@ -59,7 +59,7 @@ Insert these in front of `python main.py` when running the code.
 
 - **suffixes :** &nbsp; [ *list of list of strings* ] Contains the suffixes to search for in the input file. Further explanation below
 
-*for example:*  
+*for example:*
 If prefixes are [ ["lep1_"] , ["lep2_", "j1_"] , ["MET"] ] and suffixes are [ ["PT"] , ["PT", "Eta"] , ["", "_Phi"]] the dataloader wil load the following variables from the input file `lep1_PT, "lep2_PT, lep2_Eta, j1_PT, j1_Eta, MET, MET_Phi`. It is basically all combinations of prefixes and suffixes from lists at the same index.
 - **dir_name_processing :** &nbsp; [ *boolean* ] [ **DEPRECATED** ]Further processing on the particle name string (if required) to identify particle directory.
 
@@ -71,7 +71,7 @@ If prefixes are [ ["lep1_"] , ["lep2_", "j1_"] , ["MET"] ] and suffixes are [ ["
 
 - **shuffle :** &nbsp; [ *boolean* ] Whether the loaded data needs to be shuffled. Relevant for `--loader=hybrid and --loader=hybridMT`
 
-- **split :** &nbsp; [ *list of 3 ints* ] Training, Validation and Testing Split 
+- **split :** &nbsp; [ *list of 3 ints* ] Training, Validation and Testing Split
 **KEEP THIS AT 8,1,1 for now since stability of other splits is still being determined**
 
 - **LearningRate :** &nbsp; [ *float* ] Initial learning rate of the model
