@@ -1,19 +1,17 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
 from debugdata import randomNormalGen
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
+
 
 class referenceNetwork1(nn.Module):
-    '''
+    """
     Network based on the description of the reference paper. Assumptions have been made to determine this
     architecture since an exact description was not given. This Network is the best performing network on the
     Drell-Yan Weights.
     Reference:https://arxiv.org/pdf/2008.10949.pdf
-    '''
+    """
+
     def __init__(self, n_particles):
         super(referenceNetwork1, self).__init__()
         self.fc1 = nn.Linear(n_particles, 200)
@@ -33,6 +31,7 @@ class referenceNetwork1(nn.Module):
         y = self.relu(self.fc5(y))
         y = self.selu(self.fc6(y))
         return y
+
 
 class DNN(nn.Module):
     def __init__(self):
@@ -57,6 +56,7 @@ class DNN(nn.Module):
                 loss.backward()
                 optimizer.step()
             print("Epoch: " + str(epoch) + ", Loss: " + str(loss))
+
 
 obj = DNN()
 obj.train()

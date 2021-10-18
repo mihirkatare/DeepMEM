@@ -1,15 +1,16 @@
-import torch
 import torch.nn as nn
 
+
 class referenceNetwork1(nn.Module):
-    '''
+    """
     Network based on the description of the reference paper. Assumptions have been made to determine this
     architecture since an exact description was not given. This Network is the best performing network on the
     Drell-Yan Weights.
     Reference:https://arxiv.org/pdf/2008.10949.pdf
 
     6 Fully connected layers
-    '''
+    """
+
     def __init__(self, n_particles):
         super(referenceNetwork1, self).__init__()
         self.fc1 = nn.Linear(n_particles, 200)
@@ -29,6 +30,7 @@ class referenceNetwork1(nn.Module):
         y = self.relu(x + self.fc5(y))
         y = self.selu(self.fc6(y))
         return y
+
 
 class res2(nn.Module):
     def __init__(self, n_particles):
@@ -53,10 +55,12 @@ class res2(nn.Module):
         y = self.selu(self.fc7(y))
         return y
 
+
 class referenceNetwork2(nn.Module):
     """
     Same as referenceNetwork1 but with batchnorms on the final 2 layers
     """
+
     def __init__(self, n_particles):
         super(referenceNetwork2, self).__init__()
         self.fc1 = nn.Linear(n_particles, 200)
@@ -79,6 +83,7 @@ class referenceNetwork2(nn.Module):
         y = self.selu(self.bn2(self.fc6(y)))
         return y
 
+
 class resBlock(nn.Module):
     def __init__(self, n, n_nodes=128):
         super(resBlock, self).__init__()
@@ -92,6 +97,7 @@ class resBlock(nn.Module):
         y = self.relu(self.bn1(self.fc1(x)))
         y = self.relu(x + self.bn2(self.fc2(y)))
         return y
+
 
 class resNetwork(nn.Module):
     def __init__(self, n_particles):
