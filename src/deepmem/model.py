@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
-from data import CustomDataset, DataManager
 from sklearn.metrics import mean_absolute_percentage_error as mape
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import DataLoader
 
+from deepmem.data import CustomDataset, DataManager
 from deepmem.networks import referenceNetwork1
 from deepmem.utils import datautils
 from options import parse_args
