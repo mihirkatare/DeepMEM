@@ -13,7 +13,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils import shuffle
 from torch.utils.data import DataLoader, Dataset
 
-from options import parse_args
+from deepmem.options import parse_args
 
 # This file contains the Data Manager and Data Loader modules
 

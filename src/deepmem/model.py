@@ -12,8 +12,8 @@ from torch.utils.data import DataLoader
 
 from deepmem.data import CustomDataset, DataManager
 from deepmem.networks import referenceNetwork1
+from deepmem.options import parse_args
 from deepmem.utils import datautils
-from options import parse_args
 
 
 class DNN:

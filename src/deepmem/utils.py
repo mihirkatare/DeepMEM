@@ -4,9 +4,9 @@ import time  # used only for runtime testing
 import numpy as np
 import torch
 import uproot
+from options import parse_args
 
 from deepmem.data import CustomDataset, DataManager
-from options import parse_args
 
 
 class datautils:
