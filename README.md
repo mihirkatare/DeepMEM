@@ -22,10 +22,22 @@ The Matrix Element Method (MEM) is a powerful statistical analysis technique for
 $ python -m pip install deepmem
 ```
 
-### From source
+### From version control
+
+`deepmem` can also be installed from source by cloning a version of this repository and then from the top level of the repository locally installing in your Python virtual environment with `pip`
+
+```console
+$ python -m pip install .
+```
+
+Developers will probably want to create an editable install so their code changes are automatically picked up without having to reinstall
+
+```console
+$ python -m pip install --editable .
+```
 
 ---
-## **Requirements**
+## **Requirements for deployment**
 The code is stable in python 3.8.5. Use the `requirements.txt` file to install the dependencies using `pip` or package installer of choice.
 
 ---
