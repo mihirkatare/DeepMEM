@@ -1,5 +1,9 @@
 # DeepMEM
+[![GitHub Project](https://img.shields.io/badge/GitHub--blue?style=social&logo=GitHub)](https://github.com/mihirkatare/DeepMEM)
 [![NSF Award Number](https://img.shields.io/badge/NSF-1836650-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1836650)
+
+[![PyPI version](https://badge.fury.io/py/deepmem.svg)](https://badge.fury.io/py/deepmem)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/deepmem.svg)](https://pypi.org/project/deepmem/)
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/mihirkatare/DeepMEM/main.svg)](https://results.pre-commit.ci/latest/github/mihirkatare/DeepMEM/main)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -12,8 +16,33 @@ This repository contains the code that was used for the IRIS-HEP Fellowship proj
 The Matrix Element Method (MEM) is a powerful statistical analysis technique for experimental and simulated particle physics data. It has several benefits over black-box methods like neural networks, owing to its transparent and interpretable results. The drawback of MEM; however, is the significant amount of computationally intensive calculations involved in its execution, which impedes research that relies on it. This project aims to improve the viability of MEM, by implementing deep learning techniques to accurately and efficiently approximate MEM calculations - providing the much required speedup over the traditional approach, while preserving its interpretability. The implemented model can be used as a good approximation during the exploratory phase of research, and the full ME calculations can be used for the final runs, making the workflow for research involving MEM much more efficient.
 
 ---
-## **Requirements**
-The code is stable in python 3.8.5. Use the requirements.txt file to install the dependencies using pip or package installer of choice.
+## Installation
+
+### From PyPI
+
+`deepmem` is distributed on [PyPI](https://pypi.org/project/deepmem/) and can be installed in your Python virtual environment with `pip`
+
+```console
+$ python -m pip install deepmem
+```
+
+### From version control
+
+`deepmem` can also be installed from source by cloning a version of this repository and then from the top level of the repository locally installing in your Python virtual environment with `pip`
+
+```console
+$ python -m pip install .
+```
+
+Developers will probably want to create an editable install so their code changes are automatically picked up without having to reinstall
+
+```console
+$ python -m pip install --editable .
+```
+
+---
+## **Requirements for deployment**
+The code is stable in python 3.8.5. Use the `requirements.txt` file to install the dependencies using `pip` or package installer of choice.
 
 ---
 ## **Explanation of inputs**
