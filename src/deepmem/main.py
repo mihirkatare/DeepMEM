@@ -2,9 +2,9 @@ import time  # used only for runtime testing
 
 import torch
 
-from data import DataManager
-from model import DNN
-from options import parse_args
+from deepmem.data import DataManager
+from deepmem.model import DNN
+from deepmem.options import parse_args
 
 if __name__ == "__main__":
     start = time.time()
