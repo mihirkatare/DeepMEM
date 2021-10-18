@@ -12,8 +12,14 @@ from torch.utils.data import DataLoader
 
 from deepmem.data import CustomDataset, DataManager
 from deepmem.networks import referenceNetwork1
-from deepmem.options import parse_args
+from deepmem.options import _parse_args
 from deepmem.utils import datautils
+
+__all__ = ["DNN"]
+
+
+def __dir__():
+    return __all__
 
 
 class DNN:
@@ -152,7 +158,7 @@ class DNN:
 
 def _main():
     start = time.time()
-    opts = parse_args()
+    opts = _parse_args()
     data_manager = DataManager(input_file=opts.inputfile)
     obj = DNN(data_manager, opts)
     if opts.mode == "train":

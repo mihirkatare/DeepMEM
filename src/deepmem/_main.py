@@ -4,12 +4,12 @@ import torch
 
 from deepmem.data import DataManager
 from deepmem.model import DNN
-from deepmem.options import parse_args
+from deepmem.options import _parse_args
 
 
 def _main():
     start = time.time()
-    opts = parse_args()
+    opts = _parse_args()
     if opts.device is None:
         opts.device = "cpu"
     data_manager = DataManager(input_file=opts.inputfile)

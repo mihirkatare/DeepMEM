@@ -6,7 +6,13 @@ import torch
 import uproot
 
 from deepmem.data import CustomDataset, DataManager
-from deepmem.options import parse_args
+from deepmem.options import _parse_args
+
+__all__ = ["datautils"]
+
+
+def __dir__():
+    return __all__
 
 
 class datautils:
@@ -123,7 +129,7 @@ class datautils:
 
 def _main():
     start = time.time()
-    opts = parse_args()
+    opts = _parse_args()
     data_manager = DataManager()
     dataset = CustomDataset(data_manager, opts)  # noqa: F841
 

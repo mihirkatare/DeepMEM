@@ -13,9 +13,15 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils import shuffle
 from torch.utils.data import DataLoader, Dataset
 
-from deepmem.options import parse_args
+from deepmem.options import _parse_args
 
 # This file contains the Data Manager and Data Loader modules
+
+__all__ = ["CustomDataset", "DataManager"]
+
+
+def __dir__():
+    return __all__
 
 
 class DataManager:
@@ -249,7 +255,7 @@ def _main():
     It has a similar structure to a common PyTorch training loop.
     """
     start = time.time()
-    opts = parse_args()
+    opts = _parse_args()
     data_manager = DataManager()
     dataset = CustomDataset(data_manager, opts)
     generator = DataLoader(dataset, batch_size=64, shuffle=False, num_workers=12)

@@ -1,7 +1,7 @@
 import argparse
 
 
-def parse_args():
+def _parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--loader", type=str, default="hybridMT")
