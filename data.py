@@ -56,7 +56,6 @@ class CustomDataset(Dataset):
                 self.n_total_batches = self.len // self.bs # total number of batches in the dataset
                 self.load_chunk()
                 self.preprocess_X()
-                # self.add_noise()
 
                 self.scaler = MinMaxScaler(feature_range =(0,1), copy=True)
                 self.scaler.fit(self.X_chunk)
