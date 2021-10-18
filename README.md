@@ -1,5 +1,9 @@
 # DeepMEM
+[![GitHub Project](https://img.shields.io/badge/GitHub--blue?style=social&logo=GitHub)](https://github.com/mihirkatare/DeepMEM)
 [![NSF Award Number](https://img.shields.io/badge/NSF-1836650-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1836650)
+
+[![PyPI version](https://badge.fury.io/py/deepmem.svg)](https://badge.fury.io/py/deepmem)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/deepmem.svg)](https://pypi.org/project/deepmem/)
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/mihirkatare/DeepMEM/main.svg)](https://results.pre-commit.ci/latest/github/mihirkatare/DeepMEM/main)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
