@@ -9,9 +9,4 @@ def parse_args():
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--inputfile", type=str, default="input_files/input.json")
     parser.add_argument("--mode", type=str, default="train")
-    opts = parser.parse_args()
-    return opts
-
-
-if __name__ == "__main__":
-    opts = parse_args()
+    return parser.parse_args()

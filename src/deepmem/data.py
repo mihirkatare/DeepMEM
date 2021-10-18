@@ -243,7 +243,7 @@ class CustomDataset(Dataset):
             )
 
 
-if __name__ == "__main__":
+def _main():
     """
     This script is for testing the runtime of the dataloader.
     It has a similar structure to a common PyTorch training loop.

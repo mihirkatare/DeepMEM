@@ -121,11 +121,11 @@ class datautils:
                     self.test_X[:, phi_indices[j]] -= self.test_X[:, phi_indices[0]]
 
 
-if __name__ == "__main__":
+def _main():
     start = time.time()
     opts = parse_args()
     data_manager = DataManager()
-    dataset = CustomDataset(data_manager, opts)
+    dataset = CustomDataset(data_manager, opts)  # noqa: F841
 
     utils = datautils(data_manager, opts)
     utils.load_validation_set()

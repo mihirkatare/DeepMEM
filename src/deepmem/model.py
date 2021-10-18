@@ -150,7 +150,7 @@ class DNN:
         plt.savefig(self.manager.args["save_testing_histogram_at"])
 
 
-if __name__ == "__main__":
+def _main():
     start = time.time()
     opts = parse_args()
     data_manager = DataManager(input_file=opts.inputfile)

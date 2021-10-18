@@ -7,7 +7,7 @@ from deepmem.model import DNN
 from deepmem.options import parse_args
 
 
-def main():
+def _main():
     start = time.time()
     opts = parse_args()
     if opts.device is None:
