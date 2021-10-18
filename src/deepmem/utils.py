@@ -5,7 +5,7 @@ import numpy as np
 import torch
 import uproot
 
-from data import CustomDataset, DataManager
+from deepmem.data import CustomDataset, DataManager
 from options import parse_args
 
 

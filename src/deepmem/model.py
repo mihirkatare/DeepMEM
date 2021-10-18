@@ -12,8 +12,8 @@ from sklearn.metrics import mean_absolute_percentage_error as mape
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import DataLoader
 
+from deepmem.utils import datautils
 from options import parse_args
-from utils import datautils
 
 
 class DNN:
