@@ -48,14 +48,14 @@ jobs:
       run: twine check dist/*
 
     - name: List contents of sdist
-      run: python -m tarfile --list dist/recast-atlas-*.tar.gz
+      run: python -m tarfile --list dist/deepmem-*.tar.gz
 
     - name: List contents of wheel
-      run: python -m zipfile --list dist/recast_atlas-*.whl
+      run: python -m zipfile --list dist/deepmem-*.whl
 
     - name: Publish distribution 📦 to Test PyPI
       # publish to TestPyPI on tag events
-      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.repository == 'recast-hep/recast-atlas'
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && github.repository == 'mihirkatare/DeepMEM'
       uses: pypa/gh-action-pypi-publish@v1.4.2
       with:
         password: ${{ secrets.test_pypi_password }}
@@ -63,7 +63,7 @@ jobs:
 
     - name: Publish distribution 📦 to PyPI
       # publish to PyPI on releases
-      if: github.event_name == 'release' && github.event.action == 'published' && github.repository == 'recast-hep/recast-atlas'
+      if: github.event_name == 'release' && github.event.action == 'published' && github.repository == 'mihirkatare/DeepMEM'
       uses: pypa/gh-action-pypi-publish@v1.4.2
       with:
         password: ${{ secrets.pypi_password }}
