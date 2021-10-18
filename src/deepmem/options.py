@@ -8,5 +8,5 @@ def parse_args():
     parser.add_argument("--device", type=int, default=None)
     parser.add_argument("--epochs", type=int, default=10)
     parser.add_argument("--inputfile", type=str, default="input_files/input.json")
-    parser.add_argument("--mode", type=str, default="train")
+    parser.add_argument("--mode", type=str, help="'train' or 'test'", default="train")
     return parser.parse_args()
