@@ -12,7 +12,7 @@ class referenceNetwork1(nn.Module):
     """
 
     def __init__(self, n_particles):
-        super(referenceNetwork1, self).__init__()
+        super().__init__()
         self.fc1 = nn.Linear(n_particles, 200)
         self.fc2 = nn.Linear(200, 200)
         self.fc3 = nn.Linear(200, 200)
@@ -34,7 +34,7 @@ class referenceNetwork1(nn.Module):
 
 class res2(nn.Module):
     def __init__(self, n_particles):
-        super(res2, self).__init__()
+        super().__init__()
         self.fc1 = nn.Linear(n_particles, 200)
         self.fc2 = nn.Linear(200, 200)
         self.fc3 = nn.Linear(200, 200)
@@ -62,7 +62,7 @@ class referenceNetwork2(nn.Module):
     """
 
     def __init__(self, n_particles):
-        super(referenceNetwork2, self).__init__()
+        super().__init__()
         self.fc1 = nn.Linear(n_particles, 200)
         self.fc2 = nn.Linear(200, 200)
         self.fc3 = nn.Linear(200, 200)
@@ -86,7 +86,7 @@ class referenceNetwork2(nn.Module):
 
 class resBlock(nn.Module):
     def __init__(self, n, n_nodes=128):
-        super(resBlock, self).__init__()
+        super().__init__()
         self.fc1 = nn.Linear(n, n_nodes)
         self.fc2 = nn.Linear(n_nodes, n)
         self.bn1 = nn.BatchNorm1d(n_nodes)
@@ -101,7 +101,7 @@ class resBlock(nn.Module):
 
 class resNetwork(nn.Module):
     def __init__(self, n_particles):
-        super(resNetwork, self).__init__()
+        super().__init__()
         self.fc1 = nn.Linear(n_particles, 128)
         self.resblock1 = resBlock(128)
         self.resblock2 = resBlock(128)
