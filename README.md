@@ -12,8 +12,21 @@ This repository contains the code that was used for the IRIS-HEP Fellowship proj
 The Matrix Element Method (MEM) is a powerful statistical analysis technique for experimental and simulated particle physics data. It has several benefits over black-box methods like neural networks, owing to its transparent and interpretable results. The drawback of MEM; however, is the significant amount of computationally intensive calculations involved in its execution, which impedes research that relies on it. This project aims to improve the viability of MEM, by implementing deep learning techniques to accurately and efficiently approximate MEM calculations - providing the much required speedup over the traditional approach, while preserving its interpretability. The implemented model can be used as a good approximation during the exploratory phase of research, and the full ME calculations can be used for the final runs, making the workflow for research involving MEM much more efficient.
 
 ---
+## Installation
+
+### From PyPI
+
+`deepmem` is distributed on [PyPI](https://pypi.org/project/deepmem/) and can be installed in your Python virtual environment with `pip`
+
+```console
+$ python -m pip install deepmem
+```
+
+### From source
+
+---
 ## **Requirements**
-The code is stable in python 3.8.5. Use the requirements.txt file to install the dependencies using pip or package installer of choice.
+The code is stable in python 3.8.5. Use the `requirements.txt` file to install the dependencies using `pip` or package installer of choice.
 
 ---
 ## **Explanation of inputs**
