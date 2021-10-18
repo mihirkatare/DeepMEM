@@ -2,13 +2,15 @@ import time  # used only for runtime testing
 
 import torch
 
-from data import DataManager
-from model import DNN
-from options import parse_args
+from deepmem._version import version
+from deepmem.data import DataManager
+from deepmem.model import DNN
+from deepmem.options import _parse_args
 
-if __name__ == "__main__":
+
+def _main():
     start = time.time()
-    opts = parse_args()
+    opts = _parse_args()
     if opts.device is None:
         opts.device = "cpu"
     data_manager = DataManager(input_file=opts.inputfile)
@@ -18,3 +20,7 @@ if __name__ == "__main__":
     if opts.mode == "test":
         obj.inference(device=torch.device(opts.device))
     print("Script time: ", time.time() - start)
+
+
+def _version():
+    print(f"deepmem: v{version}")

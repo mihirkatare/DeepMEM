@@ -1,5 +1,11 @@
 import torch.nn as nn
 
+__all__ = ["referenceNetwork1", "referenceNetwork2", "res2", "resBlock", "resNetwork"]
+
+
+def __dir__():
+    return __all__
+
 
 class referenceNetwork1(nn.Module):
     """

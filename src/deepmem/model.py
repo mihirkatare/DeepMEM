@@ -10,10 +10,16 @@ from sklearn.metrics import mean_absolute_percentage_error as mape
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import DataLoader
 
-from data import CustomDataset, DataManager
-from networks import referenceNetwork1
-from options import parse_args
-from utils import datautils
+from deepmem.data import CustomDataset, DataManager
+from deepmem.networks import referenceNetwork1
+from deepmem.options import _parse_args
+from deepmem.utils import datautils
+
+__all__ = ["DNN"]
+
+
+def __dir__():
+    return __all__
 
 
 class DNN:
@@ -150,9 +156,9 @@ class DNN:
         plt.savefig(self.manager.args["save_testing_histogram_at"])
 
 
-if __name__ == "__main__":
+def _main():
     start = time.time()
-    opts = parse_args()
+    opts = _parse_args()
     data_manager = DataManager(input_file=opts.inputfile)
     obj = DNN(data_manager, opts)
     if opts.mode == "train":

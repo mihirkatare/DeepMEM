@@ -5,8 +5,14 @@ import numpy as np
 import torch
 import uproot
 
-from data import CustomDataset, DataManager
-from options import parse_args
+from deepmem.data import CustomDataset, DataManager
+from deepmem.options import _parse_args
+
+__all__ = ["datautils"]
+
+
+def __dir__():
+    return __all__
 
 
 class datautils:
@@ -121,11 +127,11 @@ class datautils:
                     self.test_X[:, phi_indices[j]] -= self.test_X[:, phi_indices[0]]
 
 
-if __name__ == "__main__":
+def _main():
     start = time.time()
-    opts = parse_args()
+    opts = _parse_args()
     data_manager = DataManager()
-    dataset = CustomDataset(data_manager, opts)
+    dataset = CustomDataset(data_manager, opts)  # noqa: F841
 
     utils = datautils(data_manager, opts)
     utils.load_validation_set()

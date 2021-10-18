@@ -17,29 +17,45 @@ The code is stable in python 3.8.5. Use the requirements.txt file to install the
 
 ---
 ## **Explanation of inputs**
-To run this code simply run `main.py` with the required shell arguments and input file modifications.
+To run this code simply run `deepmem` with the required shell arguments and input file modifications.
+
+
 The code takes two types of inputs:
 - Through an JSON input file (e.g.: `input_files/input.json`): This is supposed to have inputs that do not require dynamimc user changes, i.e, during the training/optimization phase these will remain mostly constant.
-- Through shell arguments (e.g. python main.py **`--device=0`**): These are inputs that would usually require dynamic user changes before running the code.
+- Through shell arguments (e.g. deepmem **`--device=0`**): These are inputs that would usually require dynamic user changes before running the code.
 
 #### **Examples**:
 Go through the input file at `input_files/input.json` and modify the paths to the data, where to save and load models, scalers, etc.
 Then run the following code to train the model on the options in the `input_files/input.json` using the **0th numbered CUDA GPU** for **50 epochs**:
 
 ```console
-$ python main.py --device=0 --epochs=50 --mode=train
+$ deepmem --device=0 --epochs=50 --mode=train
 ```
 Thereafter run the following code to run the testing phase once again using the options in the `input_files/input.json` using the **0th numbered CUDA GPU** for inference:
 ```console
-$ python main.py --device=0 --mode=test
+$ deepmem --device=0 --mode=test
 ```
 It should save a histogram with a visual explanation of the model performance in `post/histogram.png` (path can be changed in input file)
 ### **Shell Arguments Explanation**:
-Insert these in front of `python main.py` when running the code.
+
+```console
+$ deepmem --help
+usage: deepmem [-h] [--loader LOADER] [--device DEVICE] [--epochs EPOCHS] [--inputfile INPUTFILE] [--mode MODE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --loader LOADER
+  --device DEVICE
+  --epochs EPOCHS
+  --inputfile INPUTFILE
+  --mode MODE           'train' or 'test'
+```
+
+Pass these to `deepmem` when running the code.
 1. **--loader**: [Default: hybridMT] Which dataloader implementation to use out of [inbuilt, hybrid, hybridMT]
 **AT THE MOMENT ONLY hybridMT is properly supported. It loads all the data into memory and can be use for reasonably sized datasets (works comfortably with ~300k events on DGX)**
 
-2. **--device**: [Default: None] Which numbered cuda device to use for training. Using `None` will select the CPU instead (Not reccomended)
+2. **--device**: [Default: None] Which numbered cuda device to use for training. Using `None` will select the CPU instead (Not recommended)
 
 3. **--epochs**: [Default: 10] Number of epochs to train for
 
