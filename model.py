@@ -11,33 +11,9 @@ import time # used only for runtime testing
 from torch.optim.lr_scheduler import StepLR
 from utils import datautils
 import joblib
-
-class referenceNetwork1(nn.Module):
-    '''
-    Network based on the description of the reference paper. Assumptions have been made to determine this
-    architecture since an exact description was not given. This Network is the best performing network on the
-    Drell-Yan Weights.
-    Reference:https://arxiv.org/pdf/2008.10949.pdf
-    '''
-    def __init__(self, n_particles):
-        super(referenceNetwork1, self).__init__()
-        self.fc1 = nn.Linear(n_particles, 200)
-        self.fc2 = nn.Linear(200, 200)
-        self.fc3 = nn.Linear(200, 200)
-        self.fc4 = nn.Linear(200, 200)
-        self.fc5 = nn.Linear(200, 200)
-        self.fc6 = nn.Linear(200, 1)
-        self.relu = nn.ReLU()
-        self.selu = nn.SELU()
-
-    def forward(self, x):
-        y = self.relu(self.fc1(x))
-        y = self.relu(self.fc2(y))
-        y = self.relu(self.fc3(y))
-        y = self.relu(self.fc4(y))
-        y = self.relu(self.fc5(y))
-        y = self.selu(self.fc6(y))
-        return y
+import hist
+from sklearn.metrics import mean_absolute_percentage_error as mape
+from networks import referenceNetwork1, referenceNetwork2, res2, resNetwork
 
 class DNN():
     def __init__(self, manager, opts):
@@ -53,7 +29,7 @@ class DNN():
         train_loader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers = 0)
         mse = nn.MSELoss()
         optimizer = torch.optim.Adam(self.net.parameters(), lr=self.manager.args["LearningRate"])
-        scheduler = StepLR(optimizer, step_size=10, gamma=0.5) # Switched off currently, will be used or hyperparameter tuning
+        scheduler = StepLR(optimizer, step_size=25, gamma=0.7) # Switched off currently, will be used or hyperparameter tuning
 
         # load validation set
         self.utils = datautils(self.manager, self.opts, dataset.scaler)
@@ -106,15 +82,15 @@ class DNN():
         with torch.no_grad():
             test_y_pred = self.net(utils.test_X.float().cuda(device)).squeeze()
             test_loss = mse(utils.test_Y.float().cuda(device), test_y_pred).detach().item()
-        print("Testing Loss: " + str("%.5f" % test_loss))
+        print("Testing Loss: " + str("%.5f" % test_loss) + " MAPE: " + str(mape(utils.test_Y.float(), test_y_pred.cpu())) )
         nbins = 100
-        plt.hist(utils.test_Y.numpy(), bins=nbins, histtype = "step", color = "r", label = "Test Dataset")
-        plt.hist(test_y_pred.detach().cpu().numpy(), bins=nbins, histtype = "step", label = "DNN Prediction")
-        plt.xlabel("-log_10(DY weight)")
-        plt.ylabel("events")
-        plt.legend()
+        hist_1 = hist.Hist(hist.axis.Regular(nbins, 0, 10, name="-log_10(DY weight)")).fill(utils.test_Y.numpy())
+        hist_2 = hist.Hist(hist.axis.Regular(nbins, 0, 10, name="-log_10(DY weight)")).fill(test_y_pred.detach().cpu().numpy())
+        fig = plt.figure(figsize=(10, 8))
+        main_ax_artists, sublot_ax_arists = hist_1.plot_ratio(hist_2, rp_ylabel=r"Ratio", rp_num_label="Test Dataset", rp_denom_label="DNN Prediction", rp_uncert_draw_type="line")
+        plt.yticks(np.arange(-5,6))
+        plt.grid()
         plt.savefig(self.manager.args["save_testing_histogram_at"])
-
 if __name__ == "__main__":
     start = time.time()
     opts = parse_args()

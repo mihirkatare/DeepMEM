@@ -70,14 +70,12 @@ class datautils:
         for i in range(len(self.inputs)):
            if(self.inputs[i][-3:] == "Phi"):
                phi_indices.append(i)
-
         if(len(phi_indices)>1):
             for j in range(1,len(phi_indices)):
                 if(mode == "val"):
                     self.val_X[:, phi_indices[j]] -= self.val_X[:, phi_indices[0]]
                 elif(mode == "test"):
                     self.test_X[:, phi_indices[j]] -= self.test_X[:, phi_indices[0]]
-
 if __name__ == "__main__":
     start = time.time()
     opts = parse_args()
