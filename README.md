@@ -10,6 +10,8 @@
 
 This repository contains the code that was used for the IRIS-HEP Fellowship project: **[Deep Learning Implementations for Sustainable Matrix Element Method Calculations](https://iris-hep.org/fellows/mihirkatare.html)**.
 
+IRIS-HEP Fellowship Presentation:
+[Deep Learning for the Matrix Element Method](https://indico.cern.ch/event/1071423/contributions/4505210/attachments/2329865/3969981/Final%20Presentation%20-%20Mihir%20Katare.pdf)
 
 ---
 ## **Project Description**
